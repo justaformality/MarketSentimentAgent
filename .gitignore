@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+.venv/
+
+# Environment variables / API keys
+.env
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Local database
+market_sentiment.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
