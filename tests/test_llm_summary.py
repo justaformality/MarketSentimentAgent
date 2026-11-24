@@ -1,5 +1,5 @@
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from llm_summary import (
     generate_market_summary,
@@ -27,10 +27,14 @@ def test_generate_market_summary():
         )
     )
 
+    fake_client = MagicMock()
+    fake_client.responses.create.return_value = fake_response
+    create_mock = fake_client.responses.create
+
     with patch(
-        "llm_summary.client.responses.create",
-        return_value=fake_response,
-    ) as create_mock:
+        "llm_summary.get_client",
+        return_value=fake_client,
+    ):
 
         result = generate_market_summary(
             ticker="AAPL",
