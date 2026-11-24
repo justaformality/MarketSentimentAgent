@@ -1,10 +1,20 @@
 import os
+from functools import lru_cache
+
 from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+@lru_cache(maxsize=1)
+def get_client() -> OpenAI:
+    """Create the OpenAI client on first use and reuse it afterwards.
+
+    Building it lazily means importing this module (in tests, or while the
+    rest of the app starts) doesn't require OPENAI_API_KEY to be set.
+    """
+    return OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 def generate_market_summary(
@@ -90,7 +100,7 @@ List 3 to 5 things a beginner should monitor next.
 Give a simple, balanced summary without financial advice.
 """
 
-    response = client.responses.create(
+    response = get_client().responses.create(
         model="gpt-4.1-nano",
         input=prompt,
         temperature=0.3,

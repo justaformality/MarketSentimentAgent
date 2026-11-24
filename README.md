@@ -465,11 +465,7 @@ If sign-in works, it shows your name, email, and user ID. It is a manual check, 
 
 The project uses `pytest`.
 
-The tests are designed to run without calling external APIs unnecessarily. GitHub Actions runs the full suite on every push to `main` and on every pull request. No real API keys are needed. Because `llm_summary.py` creates the OpenAI client when it's imported, `OPENAI_API_KEY` must be set to *something*. Locally, a placeholder works:
-
-```bash
-OPENAI_API_KEY=placeholder python -m pytest
-```
+The tests are designed to run without calling external APIs unnecessarily. GitHub Actions runs the full suite on every push to `main` and on every pull request. No API keys are needed: every external call is mocked, and the OpenAI client is only created on first use.
 
 External services such as Yahoo Finance and OpenAI are mocked where appropriate.
 

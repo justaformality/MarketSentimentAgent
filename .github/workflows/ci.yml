@@ -8,11 +8,7 @@ on:
 jobs:
   pytest:
     runs-on: ubuntu-latest
-    env:
-      # llm_summary.py constructs the OpenAI client at import time, which raises
-      # if no key is set. Every OpenAI call in the tests is mocked, so a
-      # placeholder is enough. This is NOT a secret.
-      OPENAI_API_KEY: placeholder-not-a-real-key
+    # No API keys: every external call in the tests is mocked.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
