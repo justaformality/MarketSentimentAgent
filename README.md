@@ -1,5 +1,7 @@
 # Market Sentiment & News Analyst Agent
 
+[![Tests](https://github.com/justaformality/MarketSentimentAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/justaformality/MarketSentimentAgent/actions/workflows/ci.yml)
+
 A multi-user, beginner-friendly market research dashboard that combines stock price data, financial news sentiment, technical indicators, rule-based signal detection, and AI-generated explanations in one Streamlit application.
 
 The project is designed as an educational and research tool. It does **not** execute trades or provide buy/sell recommendations.
@@ -197,9 +199,10 @@ The Streamlit interface includes:
 ## Project Structure
 
 ```text
-market-sentiment-agent/
+MarketSentimentAgent/
 │
 ├── app.py
+├── auth_test.py            # standalone Google sign-in check (see "Testing Google Sign-In")
 ├── data_pipeline.py
 ├── db.py
 ├── llm_summary.py
@@ -215,9 +218,10 @@ market-sentiment-agent/
 │   └── test_technical_indicators.py
 │
 ├── .streamlit/
-│   └── secrets.toml
+│   └── secrets.toml        # you create this; gitignored
 │
-├── .env
+├── .env                    # you create this; gitignored
+├── .github/workflows/ci.yml
 ├── .gitignore
 ├── pytest.ini
 ├── requirements.txt
@@ -297,8 +301,8 @@ Handles:
 ## 1. Clone the repository
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
-cd market-sentiment-agent
+git clone https://github.com/justaformality/MarketSentimentAgent.git
+cd MarketSentimentAgent
 ```
 
 Or open the existing project directory in VS Code.
@@ -445,11 +449,27 @@ After authentication:
 
 ---
 
+## Testing Google Sign-In
+
+`auth_test.py` is a minimal Streamlit page for checking your Google OIDC setup on its own, without the API keys or the full dashboard:
+
+```bash
+streamlit run auth_test.py
+```
+
+If sign-in works, it shows your name, email, and user ID. It is a manual check, not part of the pytest suite.
+
+---
+
 # Testing
 
 The project uses `pytest`.
 
-The tests are designed to run without calling external APIs unnecessarily.
+The tests are designed to run without calling external APIs unnecessarily. GitHub Actions runs the full suite on every push to `main` and on every pull request. No real API keys are needed. Because `llm_summary.py` creates the OpenAI client when it's imported, `OPENAI_API_KEY` must be set to *something*. Locally, a placeholder works:
+
+```bash
+OPENAI_API_KEY=placeholder python -m pytest
+```
 
 External services such as Yahoo Finance and OpenAI are mocked where appropriate.
 
